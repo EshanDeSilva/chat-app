@@ -7,8 +7,11 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -16,8 +19,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import server.Server;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -31,18 +37,8 @@ public class ServerFormController {
     private Server server;
 
     public void initialize(){
-//        new Thread(() -> {
-//            try {
-//                server = Server.getInstance();
-//                server.getServerSocket().accept();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }).start();
-
         txtMsg.setStyle("-fx-font-size: 14");
+
 
         vBox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -51,7 +47,16 @@ public class ServerFormController {
             }
         });
 
-//        server.receiveMessageFromClient(vBox);
+        new Thread(() -> {
+            try {
+                server = Server.getServer();
+                server.makeSocket();
+                server.receiveMessageFromClient(vBox);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
 
         receiveMessage("Sever Starting..",vBox);
         emoji();
@@ -125,7 +130,7 @@ public class ServerFormController {
             vBox.getChildren().add(hBox);
             vBox.getChildren().add(hBoxTime);
 
-//            server.sendMessageToClient(msgToSend);
+            server.sendMessageToClient(msgToSend);
 
             txtMsg.clear();
         }
@@ -158,5 +163,21 @@ public class ServerFormController {
 
     public void attachedButtonOnAction(ActionEvent actionEvent) {
 
+    }
+
+    public void addButtonOnAction(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(pane.getScene().getWindow());
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/LoginForm.fxml"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,"something went wrong. can't add client").show();
+        }
+        stage.setTitle("EChat");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.show();
     }
 }

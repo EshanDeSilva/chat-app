@@ -16,11 +16,7 @@ public class Server {
     private static Server server;
 
     private Server() throws IOException {
-        setServerSocket(new ServerSocket(3001));
-    }
-
-    public void setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
+        serverSocket = new ServerSocket(3001);
     }
 
     public static Server getServer() throws IOException {
