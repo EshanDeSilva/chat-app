@@ -12,9 +12,9 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
 
-
     public Client(Socket socket){
         try{
+            System.out.println(socket.toString());
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -23,6 +23,10 @@ public class Client {
             e.printStackTrace();
             closeEverything(this.socket,bufferedReader,bufferedWriter);
         }
+    }
+
+    public Socket getSocket(){
+        return socket;
     }
 
     public void sendMessageToServer(String msg){

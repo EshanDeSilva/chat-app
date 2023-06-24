@@ -13,20 +13,17 @@ public class Server {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private static Server server;
 
-    private Server() throws IOException {
+    public Server() throws IOException {
         serverSocket = new ServerSocket(3001);
-    }
-
-    public static Server getServer() throws IOException {
-        return server!=null ? server:(server=new Server());
-    }
-
-    public void makeSocket() throws IOException {
-        socket=serverSocket.accept();
-        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        try{
+            socket=serverSocket.accept();
+            System.out.println("client socket added"+socket.toString());
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {

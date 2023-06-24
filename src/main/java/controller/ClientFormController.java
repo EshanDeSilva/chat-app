@@ -3,6 +3,7 @@ package controller;
 import client.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import emoji.EmojiPicker;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -48,7 +49,41 @@ public class ClientFormController {
         }
 
         client.receivedMessageFromServer(vBox);
+        emoji();
+    }
 
+    private void emoji() {
+        // Create the EmojiPicker
+        EmojiPicker emojiPicker = new EmojiPicker();
+
+        VBox vBox = new VBox(emojiPicker);
+        vBox.setPrefSize(150,300);
+        vBox.setLayoutX(400);
+        vBox.setLayoutY(175);
+        vBox.setStyle("-fx-font-size: 30");
+
+        pane.getChildren().add(vBox);
+
+        // Set the emoji picker as hidden initially
+        emojiPicker.setVisible(false);
+
+        // Show the emoji picker when the button is clicked
+        emojiButton.setOnAction(event -> {
+            if (emojiPicker.isVisible()){
+                emojiPicker.setVisible(false);
+            }else {
+                emojiPicker.setVisible(true);
+            }
+        });
+
+        // Set the selected emoji from the picker to the text field
+        emojiPicker.getEmojiListView().setOnMouseClicked(event -> {
+            String selectedEmoji = emojiPicker.getEmojiListView().getSelectionModel().getSelectedItem();
+            if (selectedEmoji != null) {
+                txtMsg.setText(txtMsg.getText()+selectedEmoji);
+            }
+            emojiPicker.setVisible(false);
+        });
     }
 
     public void txtMsgOnAction(ActionEvent actionEvent) {

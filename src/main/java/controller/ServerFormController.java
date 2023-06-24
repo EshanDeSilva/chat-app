@@ -39,7 +39,6 @@ public class ServerFormController {
     public void initialize(){
         txtMsg.setStyle("-fx-font-size: 14");
 
-
         vBox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -49,14 +48,12 @@ public class ServerFormController {
 
         new Thread(() -> {
             try {
-                server = Server.getServer();
-                server.makeSocket();
+                server = new Server();
                 server.receiveMessageFromClient(vBox);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
-
 
         receiveMessage("Sever Starting..",vBox);
         emoji();
