@@ -2,7 +2,6 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.vdurmont.emoji.EmojiParser;
 import emoji.EmojiPicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
