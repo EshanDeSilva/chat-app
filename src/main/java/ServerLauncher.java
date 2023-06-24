@@ -19,6 +19,7 @@ public class ServerLauncher extends Application {
         primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("view/ServerForm.fxml"))));
         primaryStage.setTitle("Server");
         primaryStage.centerOnScreen();
+        primaryStage.setResizable(false);
         primaryStage.show();
 
         Stage stage = new Stage();

@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ServerFormController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="528.0" prefWidth="554.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerFormController">
+   <children>
+      <ScrollPane fx:id="scrollPain" layoutX="17.0" layoutY="61.0" prefHeight="406.0" prefWidth="520.0">
+         <content>
+            <VBox fx:id="vBox" prefHeight="391.0" prefWidth="503.0" />
+         </content>
+      </ScrollPane>
+      <JFXTextField fx:id="txtMsg" layoutX="55.0" layoutY="480.0" onAction="#txtMsgOnAction" prefHeight="26.0" prefWidth="413.0" />
+      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="482.0" layoutY="476.0" onAction="#sendButtonOnAction" prefHeight="26.0" prefWidth="29.0">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/send-icon.png" />
+               </image>
+            </ImageView>
+         </graphic></JFXButton>
+      <ImageView fitHeight="87.0" fitWidth="81.0" layoutX="-10.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/EChat-logo-img.png" />
+         </image>
+      </ImageView>
+      <Text fill="#0d47a1" layoutX="65.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EChat">
+         <font>
+            <Font name="Harlow Solid Italic" size="14.0" />
+         </font>
+      </Text>
+      <Text fill="#2b50c9" layoutX="248.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server">
+         <font>
+            <Font name="Bell MT Bold" size="20.0" />
+         </font>
+      </Text>
+      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="438.0" layoutY="476.0" onAction="#emojiButtonOnAction" prefHeight="34.0" prefWidth="37.0">
+         <graphic>
+            <ImageView fitHeight="26.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/emoji-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="17.0" layoutY="476.0" onAction="#attachedButtonOnAction" prefHeight="34.0" prefWidth="18.0" text="Button">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/attachment-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
 </AnchorPane>
