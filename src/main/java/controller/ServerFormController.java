@@ -3,6 +3,7 @@ package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import emoji.EmojiPicker;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -52,7 +53,7 @@ public class ServerFormController {
 
 //        server.receiveMessageFromClient(vBox);
 
-        sendMsg("Sever Starting..");
+        receiveMessage("Sever Starting..",vBox);
         emoji();
     }
 
@@ -130,12 +131,29 @@ public class ServerFormController {
         }
     }
 
-    public void txtMsgOnAction(ActionEvent actionEvent) {
-        sendButtonOnAction(actionEvent);
+    public static void receiveMessage(String msgFromClient, VBox vBox){
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(5,5,5,10));
+
+        Text text = new Text(msgFromClient);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color: #abb8c3; -fx-font-weight: bold; -fx-background-radius: 20px");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        text.setFill(Color.color(0,0,0));
+
+        hBox.getChildren().add(textFlow);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox.getChildren().add(hBox);
+            }
+        });
     }
 
-    public void emojiButtonOnAction(ActionEvent actionEvent) {
-
+    public void txtMsgOnAction(ActionEvent actionEvent) {
+        sendButtonOnAction(actionEvent);
     }
 
     public void attachedButtonOnAction(ActionEvent actionEvent) {

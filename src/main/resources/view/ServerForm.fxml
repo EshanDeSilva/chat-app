@@ -41,7 +41,7 @@
             <Font name="Bell MT Bold" size="20.0" />
          </font>
       </Text>
-      <JFXButton fx:id="emojiButton" contentDisplay="GRAPHIC_ONLY" layoutX="438.0" layoutY="476.0" onAction="#emojiButtonOnAction" prefHeight="34.0" prefWidth="37.0">
+      <JFXButton fx:id="emojiButton" contentDisplay="GRAPHIC_ONLY" layoutX="438.0" layoutY="476.0" prefHeight="34.0" prefWidth="37.0">
          <graphic>
             <ImageView fitHeight="26.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
