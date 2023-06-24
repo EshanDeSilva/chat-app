@@ -1,13 +1,31 @@
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
-public class Launcher extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+import java.io.IOException;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        
+public class Launcher {
+    public static void main(String[] args) {
+        new Thread(() -> {
+            ServerLauncher.main(new String[]{});
+        }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Your class that extends Application
+                        try {
+                            new ClientLauncher().start(new Stage());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
