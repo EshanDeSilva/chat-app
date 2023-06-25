@@ -1,9 +1,11 @@
+import server.ServerLauncher;
+
 public class Launcher {
     public static void main(String[] args) {
         ServerLauncher.main(new String[]{});
 //
 //        new Thread(() -> {
-//            ServerLauncher.main(new String[]{});
+//            server.ServerLauncher.main(new String[]{});
 //        }).start();
 
 //        new Thread(() -> {
@@ -14,7 +16,7 @@ public class Launcher {
 //                    public void run() {
 //                        // Your class that extends Application
 //                        try {
-//                            new ClientLauncher().start(new Stage());
+//                            new client.ClientLauncher().start(new Stage());
 //                        } catch (IOException e) {
 //                            e.printStackTrace();
 //                        }

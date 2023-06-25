@@ -48,8 +48,8 @@ public class ServerFormController {
 
         new Thread(() -> {
             try {
-                server = new Server();
-                server.receiveMessageFromClient(vBox);
+                server = Server.getInstance();
+                server.makeSocket();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -123,11 +123,8 @@ public class ServerFormController {
 
             hBoxTime.getChildren().add(time);
 
-
             vBox.getChildren().add(hBox);
             vBox.getChildren().add(hBoxTime);
-
-            server.sendMessageToClient(msgToSend);
 
             txtMsg.clear();
         }
@@ -162,7 +159,7 @@ public class ServerFormController {
 
     }
 
-    public void addButtonOnAction(ActionEvent actionEvent) {
+    public void addButtonOnAction(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(pane.getScene().getWindow());

@@ -1,6 +1,5 @@
 package controller;
 
-import client.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import emoji.EmojiPicker;
@@ -18,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalTime;
@@ -31,24 +32,37 @@ public class ClientFormController {
     public Text txtLabel;
     public JFXButton emojiButton;
 
-    private Client client;
+    private Socket socket;
+    private DataInputStream dataInputStream;
+    private DataOutputStream dataOutputStream;
 
     public void initialize(){
-        try {
-            client = new Client(new Socket("localhost",3001));
-            System.out.println("Client connected");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    socket = new Socket("localhost", 3001);
+                    dataInputStream = new DataInputStream(socket.getInputStream());
+                    dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                    System.out.println("Client connected");
 
-            vBox.heightProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-                    scrollPain.setVvalue((Double) newValue);
+                    while (socket.isConnected()){
+                        String receivingMsg = dataInputStream.readUTF();
+                        receiveMessage(receivingMsg,vBox);
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        }).start();
 
-        client.receivedMessageFromServer(vBox);
+        vBox.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                scrollPain.setVvalue((Double) newValue);
+            }
+        });
+
         emoji();
     }
 
@@ -120,11 +134,15 @@ public class ClientFormController {
 
             hBoxTime.getChildren().add(time);
 
-
             vBox.getChildren().add(hBox);
             vBox.getChildren().add(hBoxTime);
 
-            client.sendMessageToServer(msgToSend);
+            try {
+                dataOutputStream.writeUTF(msgToSend);
+                dataOutputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             txtMsg.clear();
         }
