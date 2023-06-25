@@ -1,6 +1,5 @@
 package server;
 
-import com.sun.tools.javac.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,5 +31,6 @@ public class ServerLauncher extends Application {
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
+
     }
 }

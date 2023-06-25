@@ -1,8 +1,5 @@
 package controller;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import emoji.EmojiPicker;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,16 +26,15 @@ import java.time.format.DateTimeFormatter;
 
 public class ServerFormController {
     public VBox vBox;
-    public JFXTextField txtMsg;
     public ScrollPane scrollPain;
-    public JFXButton emojiButton;
     public AnchorPane pane;
 
     private Server server;
+    private static VBox staticVBox;
 
     public void initialize(){
-        txtMsg.setStyle("-fx-font-size: 14");
-
+        staticVBox = vBox;
+        receiveMessage("Sever Starting..");
         vBox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -55,46 +51,8 @@ public class ServerFormController {
             }
         }).start();
 
-        receiveMessage("Sever Starting..",vBox);
-        emoji();
-    }
-
-    private void emoji() {
-        // Create the EmojiPicker
-        EmojiPicker emojiPicker = new EmojiPicker();
-
-        VBox vBox = new VBox(emojiPicker);
-        vBox.setPrefSize(150,300);
-        vBox.setLayoutX(400);
-        vBox.setLayoutY(175);
-        vBox.setStyle("-fx-font-size: 30");
-
-        pane.getChildren().add(vBox);
-
-        // Set the emoji picker as hidden initially
-        emojiPicker.setVisible(false);
-
-        // Show the emoji picker when the button is clicked
-        emojiButton.setOnAction(event -> {
-            if (emojiPicker.isVisible()){
-                emojiPicker.setVisible(false);
-            }else {
-                emojiPicker.setVisible(true);
-            }
-        });
-
-        // Set the selected emoji from the picker to the text field
-        emojiPicker.getEmojiListView().setOnMouseClicked(event -> {
-            String selectedEmoji = emojiPicker.getEmojiListView().getSelectionModel().getSelectedItem();
-            if (selectedEmoji != null) {
-                txtMsg.setText(txtMsg.getText()+selectedEmoji);
-            }
-            emojiPicker.setVisible(false);
-        });
-    }
-
-    public void sendButtonOnAction(ActionEvent actionEvent) {
-        sendMsg(txtMsg.getText());
+        receiveMessage("Sever Running..");
+        receiveMessage("Waiting for User..");
     }
 
     private void sendMsg(String msgToSend) {
@@ -125,12 +83,10 @@ public class ServerFormController {
 
             vBox.getChildren().add(hBox);
             vBox.getChildren().add(hBoxTime);
-
-            txtMsg.clear();
         }
     }
 
-    public static void receiveMessage(String msgFromClient, VBox vBox){
+    public static void receiveMessage(String msgFromClient){
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5,5,5,10));
@@ -146,17 +102,9 @@ public class ServerFormController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                vBox.getChildren().add(hBox);
+                staticVBox.getChildren().add(hBox);
             }
         });
-    }
-
-    public void txtMsgOnAction(ActionEvent actionEvent) {
-        sendButtonOnAction(actionEvent);
-    }
-
-    public void attachedButtonOnAction(ActionEvent actionEvent) {
-
     }
 
     public void addButtonOnAction(ActionEvent actionEvent) throws IOException {
@@ -174,4 +122,5 @@ public class ServerFormController {
         stage.setResizable(false);
         stage.show();
     }
+
 }

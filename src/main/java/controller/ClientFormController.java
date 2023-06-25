@@ -35,8 +35,11 @@ public class ClientFormController {
     private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
+    private String clientName = "Client";
 
     public void initialize(){
+        txtLabel.setText(clientName);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -45,10 +48,11 @@ public class ClientFormController {
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     System.out.println("Client connected");
+                    ServerFormController.receiveMessage(clientName+" joined.");
 
                     while (socket.isConnected()){
                         String receivingMsg = dataInputStream.readUTF();
-                        receiveMessage(receivingMsg,vBox);
+                        receiveMessage(receivingMsg, ClientFormController.this.vBox);
                     }
                 }catch (IOException e){
                     e.printStackTrace();
@@ -56,7 +60,7 @@ public class ClientFormController {
             }
         }).start();
 
-        vBox.heightProperty().addListener(new ChangeListener<Number>() {
+        this.vBox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
                 scrollPain.setVvalue((Double) newValue);
@@ -64,6 +68,12 @@ public class ClientFormController {
         });
 
         emoji();
+
+    }
+
+    public void shutdown() {
+        // cleanup code here...
+        ServerFormController.receiveMessage(clientName+" left.");
     }
 
     private void emoji() {
@@ -137,8 +147,9 @@ public class ClientFormController {
             vBox.getChildren().add(hBox);
             vBox.getChildren().add(hBoxTime);
 
+
             try {
-                dataOutputStream.writeUTF(msgToSend);
+                dataOutputStream.writeUTF(clientName+":"+msgToSend);
                 dataOutputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -148,10 +159,19 @@ public class ClientFormController {
         }
     }
 
-    public static void receiveMessage(String msgFromServer, VBox vBox){
+    public static void receiveMessage(String msg, VBox vBox){
+        String name = msg.split(":")[0];
+        String msgFromServer = msg.split(":")[1];
+
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5,5,5,10));
+
+        HBox hBoxName = new HBox();
+        hBoxName.setAlignment(Pos.CENTER_LEFT);
+        Text textName = new Text(name);
+        TextFlow textFlowName = new TextFlow(textName);
+        hBoxName.getChildren().add(textFlowName);
 
         Text text = new Text(msgFromServer);
         TextFlow textFlow = new TextFlow(text);
@@ -164,6 +184,7 @@ public class ClientFormController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                vBox.getChildren().add(hBoxName);
                 vBox.getChildren().add(hBox);
             }
         });
@@ -171,5 +192,9 @@ public class ClientFormController {
 
     public void attachedButtonOnAction(ActionEvent actionEvent) {
 
+    }
+
+    public void setClientName(String name) {
+        clientName = name;
     }
 }

@@ -19,9 +19,19 @@ public class LoginFormController {
     public void logInButtonOnAction(ActionEvent actionEvent) throws IOException {
         if (!txtName.getText().isEmpty()&&txtName.getText().matches("[A-Za-z0-9]+")){
             Stage primaryStage = new Stage();
-            primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/ClientForm.fxml"))));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/ClientForm.fxml"));
+
+            ClientFormController controller = new ClientFormController();
+            controller.setClientName(txtName.getText()); // Set the parameter
+            fxmlLoader.setController(controller);
+
+            primaryStage.setScene(new Scene(fxmlLoader.load()));
             primaryStage.setTitle(txtName.getText());
+            primaryStage.setResizable(false);
             primaryStage.centerOnScreen();
+            primaryStage.setOnCloseRequest(windowEvent -> {
+                controller.shutdown();
+            });
             primaryStage.show();
 
             txtName.clear();
