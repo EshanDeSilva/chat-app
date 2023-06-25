@@ -2,7 +2,9 @@
 Chat App using Java Socket Programming
 
 # Technologies
+
 Mave
+
 Client Server Architecture
 
 # language
