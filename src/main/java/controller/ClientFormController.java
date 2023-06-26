@@ -152,7 +152,7 @@ public class ClientFormController {
 
 
                 try {
-                    dataOutputStream.writeUTF(clientName + ":" + msgToSend);
+                    dataOutputStream.writeUTF(clientName + "-" + msgToSend);
                     dataOutputStream.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -177,7 +177,7 @@ public class ClientFormController {
         vBox.getChildren().add(hBox);
 
         try {
-            dataOutputStream.writeUTF(msgToSend);
+            dataOutputStream.writeUTF(clientName + "-" +msgToSend);
             dataOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,7 +186,13 @@ public class ClientFormController {
 
     public static void receiveMessage(String msg, VBox vBox) throws IOException {
         if (msg.matches(".*\\.(png|jpe?g|gif)$")){
-            Image image = new Image(msg);
+            HBox hBoxName = new HBox();
+            hBoxName.setAlignment(Pos.CENTER_LEFT);
+            Text textName = new Text(msg.split("[-]")[0]);
+            TextFlow textFlowName = new TextFlow(textName);
+            hBoxName.getChildren().add(textFlowName);
+
+            Image image = new Image(msg.split("[-]")[1]);
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(200);
             imageView.setFitWidth(200);
@@ -197,13 +203,14 @@ public class ClientFormController {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    vBox.getChildren().add(hBoxName);
                     vBox.getChildren().add(hBox);
                 }
             });
 
         }else {
-            String name = msg.split(":")[0];
-            String msgFromServer = msg.split(":")[1];
+            String name = msg.split("-")[0];
+            String msgFromServer = msg.split("-")[1];
 
             HBox hBox = new HBox();
             hBox.setAlignment(Pos.CENTER_LEFT);
