@@ -1,5 +1,6 @@
 package client;
 
+import controller.ClientFormController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,7 +16,11 @@ public class ClientLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/ClientForm.fxml"))));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/ClientForm.fxml"));
+        ClientFormController controller = new ClientFormController();
+        fxmlLoader.setController(controller);
+        primaryStage.setScene(new Scene(fxmlLoader.load()));
+
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(primaryStage.getScene().getWindow());
